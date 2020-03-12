@@ -2,6 +2,14 @@ const express = require('express');
 const router = express.Router();
 const conn = require('../config/Database');
 var crypto = require('crypto');
+var session = require('express-session');
+const app=express();
+
+app.use(session({
+	secret: 'saniyaramsha',
+	resave: true,
+	saveUninitialized: true
+}));
 
 
 
@@ -32,9 +40,33 @@ router.post('/signup/users',(req,res)=>{
         console.log(result);
     });
 })
+
+//login
+router.post('/login/users', function(request, response) {
+	const email_address = request.body.email_address;
+	const password = request.body.password;
+	if (email_address && password) {
+    conn.query('SELECT email_address, password FROM users WHERE email_address = ? AND password = ?', [email_address, password],
+     function(error, results, fields) {
+			if (results.length > 0) {
+				request.session.loggedin = true;
+				request.session.email_address = email_address;
+				response.send('you are successfully logged in');
+      } 
+      else {
+				response.send('Incorrect Username and/or Password!');
+			}			
+			response.end();
+		});
+	} else {
+		response.send('Please enter Username and Password!');
+		response.end();
+	}
+});
+
 //login in
 
-app.post('/login', (req, res) => {
+/**app.post('/login', (req, res) => {
   let {email_address, password} = req.body;
     User.findOne({email_address: email_address}, 'username email password', (err, userData) => {
     	if (!err) {
@@ -57,7 +89,7 @@ app.post('/login', (req, res) => {
         }
     })
 })
-
+*/
 
 
 
