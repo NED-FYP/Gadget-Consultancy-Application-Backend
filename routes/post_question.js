@@ -12,8 +12,8 @@ router.post('/postQuestion/:id',(req,res)=>{
     const {ques_body}=req.body
     const {user_name}=req.body
     const user_id = req.params.id
-    conn.query(`Insert into titles(title_name) Values('${title_name}') `,
-                `Insert into tags(tag_name) Values('${tag_name}')` ,
+    conn.query(`Insert into titles(title_name) Values('${title_name}') `
+                `Insert into tags(tag_name) Values('${tag_name}')` 
                 `Insert into questions(question_body, title_id ,tag_id ,user_id) 
                 Values('${ques_body}', LAST_INSERT_ID() , LAST_INSERT_ID() ,
                 (select user_id from users where user_id = '${user_id}') )`,(err,result)=>
