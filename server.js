@@ -3,7 +3,7 @@ const con =require('./config/Database');
 const Routes=require('./routes/signup');
 const Routes2=require('./routes/authentication.js');
 const Routes3=require('./routes/forgot_password.js');
-const Routes4=require('./routes/post_question.js');
+const Routes4=require('./routes/questions.js');
 const bodyParser=require('body-parser');
 const app=express();
 
@@ -26,10 +26,10 @@ con.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
 });
-app.use('/gadgetconsultancy.com', Routes)
-app.use('/gadgetconsultancy.com', Routes2)
-app.use('/gadgetconsultancy.com', Routes3)
-app.use('/gadgetconsultancy.com', Routes4)
+app.use('/api', Routes)
+app.use('/api', Routes2)
+app.use('/api', Routes3)
+app.use('/api', Routes4)
 
 const port=4000;
 app.listen(port,console.log(`listening server on port ${port}`));
