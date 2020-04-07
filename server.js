@@ -4,8 +4,8 @@ const Routes=require('./routes/signup');
 const Routes2=require('./routes/authentication.js');
 const Routes3=require('./routes/forgot_password.js');
 const Routes4=require('./routes/questions.js');
-const Routes5=require('./routes/actvities.js');
-const Routes6=require('./routes/histories.js');
+//const Routes5=require('./routes/actvities.js');
+const Routes6=require('./routes/activities.js');
 const bodyParser=require('body-parser');
 const app=express();
 
@@ -32,7 +32,7 @@ app.use('/api', Routes)
 app.use('/api', Routes2)
 app.use('/api', Routes3)
 app.use('/api', Routes4)
-app.use('/api', Routes5)
+//app.use('/api', Routes5)
 app.use('/api', Routes6)
 
 const port=4000;

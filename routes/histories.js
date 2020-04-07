@@ -25,7 +25,7 @@ router.delete('/history/:id', (req, res) => {
   //get all history by user id
 router.get('/histories/user/:user_id',(req,res)=>{
     const user_id = req.params.user_id
-    conn.query(`SELECT * FROM histories where user_id= '${user_id}'`,(err,result)=>
+    conn.query(`SELECT * FROM histories where user_id= '${user_id}' ORDER BY created_at DESC`,(err,result)=>
     {
         if(err) throw err;
         res.json(result)
