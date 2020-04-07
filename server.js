@@ -5,7 +5,8 @@ const Routes2=require('./routes/authentication.js');
 const Routes3=require('./routes/forgot_password.js');
 const Routes4=require('./routes/questions.js');
 //const Routes5=require('./routes/actvities.js');
-const Routes6=require('./routes/activities.js');
+const activities =require('./routes/activities')
+const Routes6=require('./routes/histories.js');
 const bodyParser=require('body-parser');
 const app=express();
 
@@ -34,6 +35,8 @@ app.use('/api', Routes3)
 app.use('/api', Routes4)
 //app.use('/api', Routes5)
 app.use('/api', Routes6)
+app.use('/api', activities)
+
 
 const port=4000;
 app.listen(port,console.log(`listening server on port ${port}`));

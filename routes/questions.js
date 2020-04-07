@@ -2,23 +2,40 @@ const express = require('express');
 const router = express.Router();
 const conn = require('../config/Database');
 
-
-
-
-
-
   //edit a question
 
-router.put('/questions/:id/:userid', (req, res) => {
-    let id = req.params.id
-    const question_body =req.body.question_body;
-    conn.query(`UPDATE questions SET question_body= '${question_body}' ,  WHERE id = '${id}' AND user_id= '${id}'`, function (err, hero) {
-      if (err)
-        res.json({ msg: err.message });
-      res.json(question)
-  
-    });
-  })
+ router.put('/question/:id',(req,res)=>{
+    var question_title=req.body.title
+    var question_body=req.body.body
+    var question_id = req.params.id
+  conn.query(`UPDATE questions SET question_title = '${question_title}' ,  question_body = '${question_body}' 
+   WHERE id = '${question_id}'` ,
+    function (err, result) {
+        if(err){
+          res.json({ msg: err.message });
+        }else{
+
+      var tags = req.body.tags
+      conn.query(`DELETE FROM tags Where question_id=${question_id}`
+      ,
+         function (err, result) {
+                    if (err){
+                      res.json({ msg: err.message });
+                    }
+              	});
+			//var question_id = result.insertId;
+        tags.forEach(element => {
+        conn.query( `Insert into tags(tag_name, question_id) Values('${element.tag}', '${question_id}' )`	,
+         function (err, result) {
+                    if (err){
+                      res.json({ msg: err.message });
+                    }
+              	});
+			});
+			res.json(result)
+		}
+	});
+});
 
   //get all questions
 router.get('/getQuestions',(req,res)=>{
@@ -67,7 +84,7 @@ router.get('/getQuestions',(req,res)=>{
 
 //add a question
 
-router.post('/addQuestion',(req,res)=>{
+router.post('/question',(req,res)=>{
     var question_title=req.body.title
     var question_body=req.body.body
     var user_id = req.body.user_id
@@ -75,25 +92,20 @@ router.post('/addQuestion',(req,res)=>{
     Values('${question_title}' ,'${question_body}' ,'${user_id}' )` ,
     function (err, result) {
         if(err){
-            res.json({ msg: err.message });
-            
-
-               }
-        else{
-            var tags = req.body.tags
+          res.json({ msg: err.message });
+        }else{
+			var tags = req.body.tags
+			var question_id = result.insertId;
             tags.forEach(element => {
-                conn.query( `Insert into tags(tag_name, question_id) Values('${element.tag}', LAST_INSERT_ID() )`
-             , function (err, result) {
-                    if (err)
+				conn.query( `Insert into tags(tag_name, question_id) Values('${element.tag}', '${question_id}' )`
+				, function (err, result) {
+                    if (err){
                         res.json({ msg: err.message });
-                    res.json(result)
-                                         });
-        });
-
-    }
-            
-    });
-
-
+                    }
+              	});
+			});
+			res.json(result)
+		}
+	});
 });
 module.exports=router;
