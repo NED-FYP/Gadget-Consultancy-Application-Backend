@@ -49,7 +49,7 @@ router.get('/questions',(req,res)=>{
   
   
   //get question by user_id
-  router.get('/questions/user/:user_id',(req,res)=>{
+  router.get('/question/user/:user_id',(req,res)=>{
     const user_id = req.params.user_id
     conn.query(`SELECT * FROM questions where user_id= '${user_id}'`,(err,result)=>
     {
