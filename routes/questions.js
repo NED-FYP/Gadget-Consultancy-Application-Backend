@@ -38,7 +38,7 @@ const conn = require('../config/Database');
 });
 
   //get all questions
-router.get('/getQuestions',(req,res)=>{
+router.get('/questions',(req,res)=>{
     conn.query("SELECT * FROM questions",(err,result)=>
     {
         if(err) throw err;
@@ -49,7 +49,7 @@ router.get('/getQuestions',(req,res)=>{
   
   
   //get question by user_id
-  router.get('/getQuestions/:user_id',(req,res)=>{
+  router.get('/questions/user/:user_id',(req,res)=>{
     const user_id = req.params.user_id
     conn.query(`SELECT * FROM questions where user_id= '${user_id}'`,(err,result)=>
     {
@@ -60,7 +60,7 @@ router.get('/getQuestions',(req,res)=>{
   })
   
   //get question by id
-  router.get('/getQuestion/:id',(req,res)=>{
+  router.get('/question/:id',(req,res)=>{
       const question_id = req.params.id
       conn.query(`SELECT * FROM questions where id= '${question_id}'`,(err,result)=>
       {
@@ -71,7 +71,7 @@ router.get('/getQuestions',(req,res)=>{
     })
   
   //delete question
-  router.delete('/deleteQuestion/:id', (req, res) => {
+  router.delete('/question/:id', (req, res) => {
       let question_id = req.params.id
       conn.query(`DELETE FROM questions Where id=${question_id}`, function (err, result, fields) {
         if (err)
