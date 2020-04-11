@@ -7,7 +7,7 @@ const questions=require('./routes/questions.js');
 const activities =require('./routes/activities')
 const histories=require('./routes/histories.js');
 const likes=require('./routes/likes.js');
-//const dislikes=require('./routes/dislikes.js');
+const dislikes=require('./routes/dislikes.js');
 const bodyParser=require('body-parser');
 const app=express();
 
@@ -37,7 +37,7 @@ app.use('/api', questions)
 app.use('/api', histories)
 app.use('/api', activities)
 app.use('/api', likes)
-//app.use('/api', dislikes)
+app.use('/api', dislikes)
 
 
 
