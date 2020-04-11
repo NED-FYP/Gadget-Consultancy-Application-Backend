@@ -1,12 +1,13 @@
 const express=require('express');
 const con =require('./config/Database');
-const Routes=require('./routes/signup');
-const Routes2=require('./routes/authentication.js');
-const Routes3=require('./routes/forgot_password.js');
-const Routes4=require('./routes/questions.js');
-//const Routes5=require('./routes/actvities.js');
+const signup=require('./routes/signup');
+const authentication=require('./routes/authentication.js');
+const forgot_password=require('./routes/forgot_password.js');
+const questions=require('./routes/questions.js');
 const activities =require('./routes/activities')
-const Routes6=require('./routes/histories.js');
+const histories=require('./routes/histories.js');
+const likes=require('./routes/likes.js');
+//const dislikes=require('./routes/dislikes.js');
 const bodyParser=require('body-parser');
 const app=express();
 
@@ -29,13 +30,15 @@ con.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
 });
-app.use('/api', Routes)
-app.use('/api', Routes2)
-app.use('/api', Routes3)
-app.use('/api', Routes4)
-//app.use('/api', Routes5)
-app.use('/api', Routes6)
+app.use('/api', signup)
+app.use('/api', authentication)
+app.use('/api', forgot_password)
+app.use('/api', questions)
+app.use('/api', histories)
 app.use('/api', activities)
+app.use('/api', likes)
+//app.use('/api', dislikes)
+
 
 
 const port=4000;
