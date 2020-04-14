@@ -2,43 +2,89 @@ const express = require('express');
 const router = express.Router();
 const conn = require('../config/Database');
 
-  //edit a question
+//Post a question
+  router.post('/question',(req,res)=>{
+    var question_title=req.body.title
+    var question_body=req.body.body
+    var user_id = req.body.user_id
 
- router.put('/question/:id',(req,res)=>{
+    conn.query(`Insert into questions(question_title, question_body, user_id) 
+                Values('${question_title}' ,'${question_body}' ,'${user_id}' )` ,
+      function (err, result)
+      {
+        if(err)
+        {
+          res.json({ msg: err.message });
+        }
+        else
+        {
+          var tags = req.body.tags
+          var question_id = result.insertId;
+
+          tags.forEach(element => {
+            conn.query( `Insert into tags(tag_name, question_id) Values('${element.tag}', '${question_id}' )`,
+            function (err, result) 
+              {
+                  if (err)
+                  {
+                      res.json({ msg: err.message });
+                  }
+              });
+          });
+
+          res.json(result)
+        }
+
+      });
+  });
+
+//edit a question
+  router.put('/question/:id',(req,res)=>{
     var question_title=req.body.title
     var question_body=req.body.body
     var question_id = req.params.id
+
   conn.query(`UPDATE questions SET question_title = '${question_title}' ,  question_body = '${question_body}' 
-   WHERE id = '${question_id}'` ,
-    function (err, result) {
-        if(err){
+              WHERE id = '${question_id}'` ,
+      function (err, result) 
+      {
+        if(err)
+        {
           res.json({ msg: err.message });
-        }else{
+        }
+        else
+        {
+          var tags = req.body.tags
 
-      var tags = req.body.tags
-      conn.query(`DELETE FROM tags Where question_id=${question_id}`
-      ,
-         function (err, result) {
-                    if (err){
-                      res.json({ msg: err.message });
-                    }
-              	});
-			//var question_id = result.insertId;
-        tags.forEach(element => {
-        conn.query( `Insert into tags(tag_name, question_id) Values('${element.tag}', '${question_id}' )`	,
-         function (err, result) {
-                    if (err){
-                      res.json({ msg: err.message });
-                    }
-              	});
-			});
+          conn.query(`DELETE FROM tags Where question_id=${question_id}`,
+          function (err, result)
+           {
+              if (err)
+              {
+                res.json({ msg: err.message });
+              }
+           });
+		
+          tags.forEach(element => 
+          {
+          conn.query( `Insert into tags(tag_name, question_id) Values('${element.tag}', '${question_id}' )`	,
+          function (err, result) 
+           {
+              if (err)
+              {
+                res.json({ msg: err.message });
+              }
+           });
+          });
+          
 			res.json(result)
-		}
-	});
-});
+        }
+        
+	   });
+  });
 
-  //get all questions
-router.get('/questions',(req,res)=>{
+//get all questions
+  router.get('/questions',(req,res)=>{
     conn.query("SELECT * FROM questions",(err,result)=>
     {
         if(err) throw err;
@@ -48,7 +94,7 @@ router.get('/questions',(req,res)=>{
   })
   
   
-  //get question by user_id
+//get question by user_id
   router.get('/question/user/:user_id',(req,res)=>{
     const user_id = req.params.user_id
     conn.query(`SELECT * FROM questions where user_id= '${user_id}'`,(err,result)=>
@@ -59,7 +105,7 @@ router.get('/questions',(req,res)=>{
     });
   })
   
-  //get question by id
+//get question by id
   router.get('/question/:id',(req,res)=>{
       const question_id = req.params.id
       conn.query(`SELECT * FROM questions where id= '${question_id}'`,(err,result)=>
@@ -70,42 +116,16 @@ router.get('/questions',(req,res)=>{
       });
     })
   
-  //delete question
+//delete question
   router.delete('/question/:id', (req, res) => {
       let question_id = req.params.id
-      conn.query(`DELETE FROM questions Where id=${question_id}`, function (err, result, fields) {
+      conn.query(`DELETE FROM questions Where id=${question_id}`, function (err, result) 
+      {
         if (err)
           res.json({ msg: err.message });;
         res.json(result)
     
       });
-    })
+  })
     
-
-//add a question
-
-router.post('/question',(req,res)=>{
-    var question_title=req.body.title
-    var question_body=req.body.body
-    var user_id = req.body.user_id
-    conn.query(`Insert into questions(question_title, question_body, user_id) 
-    Values('${question_title}' ,'${question_body}' ,'${user_id}' )` ,
-    function (err, result) {
-        if(err){
-          res.json({ msg: err.message });
-        }else{
-			var tags = req.body.tags
-			var question_id = result.insertId;
-            tags.forEach(element => {
-				conn.query( `Insert into tags(tag_name, question_id) Values('${element.tag}', '${question_id}' )`
-				, function (err, result) {
-                    if (err){
-                        res.json({ msg: err.message });
-                    }
-              	});
-			});
-			res.json(result)
-		}
-	});
-});
 module.exports=router;

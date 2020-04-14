@@ -1,3 +1,4 @@
+/** 
 //import Sequelize from 'sequelize';
 import User from '../sequelize';
 
@@ -26,3 +27,4 @@ module.exports = (app) => {
     });
   });
 };
+*/
