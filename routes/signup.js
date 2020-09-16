@@ -24,11 +24,13 @@ var session = require('express-session');
 
     conn.query(`Insert into users(user_name,email_address, password ) 
                 Values ('${user_name}', '${email_address}', '${hashedpassword}')`,
-    (err,result)=>
+    (err)=>
     {
-        if(err) throw err;
-        res.json(result)
-        console.log(result);
+       if (err)
+       {
+          res.json({ msg: err.message });
+       }
+      res.send({ 'message': 'Successfully Regestered'});
     });
 
   })

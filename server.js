@@ -34,6 +34,6 @@ app.use('/api', activities)
 app.use('/api', likes)
 app.use('/api', dislikes)
 
-const port=4000;
+const port=5000;
 app.listen(port,console.log(`listening server on port ${port}`));
 

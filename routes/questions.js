@@ -8,14 +8,15 @@ const conn = require('../config/Database');
     var question_body=req.body.body
     var user_id = req.body.user_id
 
-    conn.query(`Insert into questions(question_title, question_body, user_id) 
-                Values('${question_title}' ,'${question_body}' ,'${user_id}' )` ,
+    conn.query(`Insert into questions(question_title, question_body, user_id ) 
+                Values('${question_title}' ,'${question_body}' ,'${user_id}'  )` ,
       function (err, result)
       {
         if(err)
         {
-          res.json({ msg: err.message });
+          res.json({ msg: 'error' });
         }
+        /*
         else
         {
           var tags = req.body.tags
@@ -23,18 +24,20 @@ const conn = require('../config/Database');
 
           tags.forEach(element => {
             conn.query( `Insert into tags(tag_name, question_id) Values('${element.tag}', '${question_id}' )`,
-            function (err, result) 
+            function (err, res) 
               {
                   if (err)
                   {
-                      res.json({ msg: err.message });
+                      res.json({ msg: 'Error of tag' });
                   }
               });
-          });
+          }); 
 
-          res.json(result)
-        }
-
+          
+        }**/
+        else{
+        res.send({ 'message': 'Question Posted Successfully'});
+            }
       });
   });
 
