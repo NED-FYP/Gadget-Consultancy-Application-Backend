@@ -36,7 +36,7 @@ const conn = require('../config/Database');
           
         }**/
         else{
-        res.send({ 'message': 'Question Posted Successfully'});
+        res.send({ msg: 'Question Posted Successfully'});
             }
       });
   });
