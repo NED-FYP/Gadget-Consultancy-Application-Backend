@@ -12,11 +12,12 @@ router.post('/login', function(request, response) {
 
 	if (email_address && hashedpassword) 
 	{
-		conn.query('SELECT email_address, password FROM users WHERE email_address = ? AND password = ?', [email_address,hashedpassword],
+		conn.query('SELECT email_address, user_name, id FROM users WHERE email_address = ? AND password = ?', [email_address,hashedpassword],
 		function(error, results, fields) {
 			if (results.length > 0) 
 			{
-				response.send({'success' :true ,'users': results[0].email_address});
+				
+				response.send({'success' :true ,'users': results[0]});
 			} 
 			else 
 			{

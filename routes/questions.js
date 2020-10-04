@@ -107,6 +107,16 @@ const conn = require('../config/Database');
         console.log(result);
     });
   })
+  //get answer by user_id
+  router.get('/answer/user/:user_id',(req,res)=>{
+    const user_id = req.params.user_id
+    conn.query(`SELECT * FROM answers where user_id= '${user_id}'`,(err,result)=>
+    {
+        if(err) throw err;
+        res.json(result)
+        console.log(result);
+    });
+  })
   
 //get question by id
   router.get('/question/:id',(req,res)=>{
@@ -130,5 +140,32 @@ const conn = require('../config/Database');
     
       });
   })
-    
+  
+  //get answers by user_id and question_id
+router.get('/answer/question/user/:question_id/',(req,res)=>{
+  //const user_id = req.params.user_id
+  const question_id = req.params.question_id
+  conn.query(`SELECT * FROM answers where question_id= '${question_id}' `,(err,result)=>
+  {
+      if(err) throw err;
+      res.json(result)
+      console.log(result);
+  });
+})
+//Post answer
+router.post('/answer',(req,res)=>{
+  var reply=req.body.reply
+  var question_id = req.body.question_id
+  var user_id = req.body.user_id
+
+  conn.query(`Insert into answers(reply, question_id, user_id) 
+              Values('${reply}' ,'${question_id}' ,'${user_id}'  )` ,
+    function (err, result)
+    {
+      if(err)
+      {
+        res.json({ msg: 'error' });
+      }
+    })
+    })
 module.exports=router;
